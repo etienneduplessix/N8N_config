@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # postgres:
+  #   build:
+  #     context: ./src/postgres
+  #   container_name: postgres
+  #   restart: always
+  #   environment:
+  #     POSTGRES_USER: n8n
+  #     POSTGRES_PASSWORD: n8npass
+  #     POSTGRES_DB: n8ndb
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+
+  n8n:
+    build:
+      context: ./src/N8N
+    container_name: n8n
+    restart: always
+    environment:
+      # - DB_TYPE=postgresdb
+      # - DB_POSTGRESDB_HOST=postgres
+      # - DB_POSTGRESDB_PORT=5432
+      # - DB_POSTGRESDB_DATABASE=n8ndb
+      # - DB_POSTGRESDB_USER=n8n
+      # - DB_POSTGRESDB_PASSWORD=n8npass
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=adminpass
+      - N8N_PORT=5678
+      - N8N_HOST=n8n.local
+      - WEBHOOK_URL=http://localhost:5678
+    # depends_on:
+    #   - postgres
+    ports:
+      - "5678:5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+  # ollama:
+  #   build:
+  #     context: ./src/ollama
+  #   container_name: ollama
+  #   restart: always
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama_data:/root/.ollama
+
+volumes:
+  # postgres_data:
+  n8n_data:
+  # ollama_data:
